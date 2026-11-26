@@ -1,38 +1,80 @@
 package com.ing.zoo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Zoo {
-    public static void main(String[] args)
-    {
-        String[] commands = new String[4];
-        commands[0] = "hello";
-        commands[1] = "give leaves";
-        commands[2] = "give meat";
-        commands[3] = "perform trick";
-
-        Lion henk = new Lion();
-        henk.name = "henk";
-        Hippo elsa = new Hippo();
-        elsa.name = "elsa";
-        Pig dora = new Pig();
-        dora.name = "dora";
-        Tiger wally = new Tiger();
-        wally.name = "wally";
-        Zebra marty = new Zebra();
-        marty.name = "marty";
+    // Ik heb een lijst gemaakt van alle dieren, zodat ik niet voor alle dieren apart code moet schrijven.
+    public static void main(String[] args) {
+        List<Animal> animals = new ArrayList<>();
+        animals.add(new Lion("henk"));
+        animals.add(new Hippo("elsa"));
+        animals.add(new Pig("dora"));
+        animals.add(new Tiger("wally"));
+        animals.add(new Zebra("marty"));
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voer uw command in: ");
+        String input = scanner.nextLine().trim();
 
-        String input = scanner.nextLine();
-        if(input.equals(commands[0] + " henk"))
-        {
-            henk.sayHello();
-        }
-        else
-        {
+        // equalsIgnoreCase, het maakt niet uit of de gebruiker "Hello" of "hello" typt.
+        if (input.equalsIgnoreCase("hello")) {
+            // Geen naam dan zeggen alle dieren hallo.
+            for (Animal animal : animals) {
+                animal.sayHello();
+            }
+        } else if (input.toLowerCase().startsWith("hello ")) {
+            // Wel een naam dan zegt alleen dat dier hallo.
+            // substring haalt het stuk "hello " weg, zodat alleen de naam overblijft.
+            String name = input.substring("hello ".length()).trim();
+            sayHelloTo(animals, name);
+        } else if (input.equalsIgnoreCase("give leaves")) {
+            giveLeaves(animals);
+        } else if (input.equalsIgnoreCase("give meat")) {
+            giveMeat(animals);
+        } else if (input.equalsIgnoreCase("perform trick")) {
+            performTricks(animals);
+        } else {
             System.out.println("Unknown command: " + input);
+        }
+    }
+
+    // Zoekt het dier met de opgegeven naam en laat alleen dat dier hallo zeggen.
+    private static void sayHelloTo(List<Animal> animals, String name) {
+        for (Animal animal : animals) {
+            if (animal.getName().equalsIgnoreCase(name)) {
+                animal.sayHello();
+                return;
+            }
+        }
+        System.out.println("Er is geen dier met de naam " + name);
+    }
+
+    // Geeft leaves aan alle Herbivoren
+    private static void giveLeaves(List<Animal> animals) {
+        for (Animal animal : animals) {
+            if (animal instanceof Herbivore) {
+                ((Herbivore) animal).eatLeaves();
+            }
+        }
+    }
+
+    // Geeft meat aan alle Carnivoren
+    private static void giveMeat(List<Animal> animals) {
+        for (Animal animal : animals) {
+            if (animal instanceof Carnivore) {
+                ((Carnivore) animal).eatMeat();
+            }
+        }
+    }
+
+    // Alle dieren die een trucje kunnen doen dan een trucje.
+    private static void performTricks(List<Animal> animals) {
+        for (Animal animal : animals) {
+            if (animal instanceof TrickPerformer) {
+                ((TrickPerformer) animal).performTrick();
+            }
         }
     }
 }
