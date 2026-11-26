@@ -13,6 +13,8 @@ public class Zoo {
         animals.add(new Pig("dora"));
         animals.add(new Tiger("wally"));
         animals.add(new Zebra("marty"));
+        animals.add(new Giraffe("gerrit"));
+        animals.add(new Wolf("wolfie"));
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voer uw command in: ");
